@@ -19,24 +19,51 @@ app.get('/', (req, res) => {
 // Handle form submission
 app.post('/send', (req, res) => {
   const message = req.body.message;
+  const image = req.body.image;
+
+  let payload = {
+    message: message,
+  };
+
+  if (image) {
+    payload.imageThumbnail = image;
+    payload.imageFullsize = image;
+  }
 
   // Send the message to Line Notify
-  axios
-    .post('https://notify-api.line.me/api/notify', {
-      message: message,
-    }, {
-      headers: {
+//   axios
+//     .post('https://notify-api.line.me/api/notify', {
+//       message: message,
+//     }, {
+//       headers: {
+//         'Content-Type': 'application/x-www-form-urlencoded',
+//         'Authorization': 'Bearer 31RCU65rvR46z0BYuow0j7Y7PUDOuU3mpXiueEoWcnc',
+//       },
+//     })
+//     .then((response) => {
+//       console.log(response.data);
+//       res.render('success', { message });
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     //   res.render('error');
+//     });
+
+    // Send the message to Line Notify
+    axios
+    .post('https://notify-api.line.me/api/notify', payload, {
+        headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer mEMz5TD1UWXh3n2AC2ETU4787EMhQcOj9NBJxUc69ZK',
-      },
+        'Authorization': 'Bearer 31RCU65rvR46z0BYuow0j7Y7PUDOuU3mpXiueEoWcnc',
+        },
     })
     .then((response) => {
-      console.log(response.data);
-      res.render('success', { message });
+        console.log(response.data);
+        res.render('success', { message });
     })
     .catch((error) => {
-      console.error(error);
-    //   res.render('error');
+        console.error(error);
+        res.render('error');
     });
 });
 
